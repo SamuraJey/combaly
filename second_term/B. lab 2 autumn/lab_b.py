@@ -1,55 +1,52 @@
-def find_distinct_representatives(sets: list) -> tuple:
-    n = len(sets)
-    representatives = [0] * n
+def kuhn_algorithm(n: int, sets: list) -> list[str]:
+
+    graph = {}
+    for i in range(n):
+        graph[i] = sets[i]
+
+    match = {}
     used = set()
 
-    def backtrack(index: int) -> bool:
-        if index == n:
-            return True
-
-        for element in sets[index]:
-            if element not in used:
-                representatives[index] = element
-                used.add(element)
-                if backtrack(index + 1):
-                    return True
-                used.remove(element)
-
+    def try_kuhn(v):
+        if v in used:
+            return False
+        used.add(v)
+        for to in graph[v]:
+            if to not in match or try_kuhn(match[to]):
+                match[to] = v
+                return True
         return False
 
-    if backtrack(0):
-        return 'Y', representatives
+    for v in range(n):
+        used.clear()
+        try_kuhn(v)
+
+    if len(match) == n:
+        result = ['Y']
+        representatives = [0] * n
+        for key, value in match.items():
+            representatives[value] = key
+        result.append(' '.join(map(str, representatives)))
+        return result
     else:
-        return 'N',
-
-
-def read_input(file_path: str) -> list:
-    with open(file_path, 'r') as file:
-        inputs = []
-        n = int(file.readline().strip())
-        for _ in range(n):
-            # We don't need to convert the elements to integers, because we don't use them as integers
-            # using strings expands the program's capabilities
-            line = list(file.readline().strip().split())
-            # line = list(map(int, file.readline().strip().split()))
-            inputs.append(line[:-1])  # Remove 0 at the end of each line
-        return inputs
-
-
-def write_output(file_path: str, result: tuple) -> None:
-    with open(file_path, 'w') as file:
-        if result[0] == 'Y':
-            file.write('Y\n')
-            file.write(' '.join(map(str, result[1])) + '\n')
-        else:
-            file.write('N\n')
+        return ['N']
 
 
 def main():
-    inputs = read_input('in.txt')
-    result = find_distinct_representatives(inputs)
-    write_output('out.txt', result)
+    with open('in.txt', 'r') as file:
+        sets_input = []
+        n = int(file.readline().strip())
+        for _ in range(n):
+            line = list(map(int, file.readline().strip().split()))
+            sets_input.append(line[:-1])  # Remove 0 at the end of each line
+
+    result = kuhn_algorithm(n, sets_input)
+
+    with open('out.txt', 'w') as file:
+        file.write(result[0] + '\n')
+        if result[0] == 'Y':
+            file.write(result[1] + '\n')
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

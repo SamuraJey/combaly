@@ -122,9 +122,12 @@ def main():
     graph = make_list(all_values)
     vertex = len(graph)
     matrix = make_matrix(graph, vertex)
+    print(matrix)
     BoruvkaKraskal.compute_tree_weight(vertex, matrix)
     write_result('out.txt')
 
 
 if __name__ == "__main__":
     main()
+
+    # n^2*log(n*2)
