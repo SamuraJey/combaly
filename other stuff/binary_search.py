@@ -147,6 +147,7 @@ def main():
 if __name__ == '__main__':
     binary_time_arr = []
     pythonic_time_arr = []
+    total_time_start = time()
     for i in range(100):
         binary_time, pythonic_time = main()
 
@@ -155,5 +156,11 @@ if __name__ == '__main__':
 
     binary_mean = sum(binary_time_arr) / len(binary_time_arr)
     pythonic_mean = sum(pythonic_time_arr) / len(pythonic_time_arr)
-    print(f'{binary_mean=}')
-    print(f'{pythonic_mean=}')
+    total_time_end = time()
+    print(f'total time to run everything: {total_time_end - total_time_start:.2f}')
+    print(f'{binary_mean=:.16f}')
+    print(f'{pythonic_mean=:.16f}')
+    if binary_mean > pythonic_mean:
+        print(f'pythonic way is {binary_mean/pythonic_mean:.2f}x faster')
+    elif binary_mean < pythonic_mean:
+        print(f'binary way is {pythonic_mean/binary_mean:.2f}x faster')
