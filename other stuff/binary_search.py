@@ -13,7 +13,7 @@ import random
 from time import time
 
 
-def matrix_print(a):
+def matrix_print(a: list[list[int]]) -> None:
     s = [[str(e) for e in row] for row in a]
     lens = [max(map(len, col)) for col in zip(*s)]
     fmt = '\t'.join('{{:{}}}'.format(x) for x in lens)
@@ -22,7 +22,7 @@ def matrix_print(a):
     print('\n'.join(table))
 
 
-def sort_matrix(mat):
+def sort_matrix(mat: list[list[int]]) -> list[list[int]]:
     # Step 1: Create a min-heap and insert all elements of the matrix into it.
     heap = []
     for row in mat:
@@ -112,7 +112,7 @@ def get_correct_answer(a: list[list[int]], value: int) -> tuple[int, int] | bool
         return False
 
 
-def main():
+def main() -> tuple[float, float]:
     n = random.randint(100, 100)
     m = random.randint(100, 100)
     a = prepare_data(n, m)
@@ -145,9 +145,9 @@ def main():
 
 
 if __name__ == '__main__':
+    total_time_start = time()
     binary_time_arr = []
     pythonic_time_arr = []
-    total_time_start = time()
     for i in range(100):
         binary_time, pythonic_time = main()
 
@@ -157,7 +157,7 @@ if __name__ == '__main__':
     binary_mean = sum(binary_time_arr) / len(binary_time_arr)
     pythonic_mean = sum(pythonic_time_arr) / len(pythonic_time_arr)
     total_time_end = time()
-    print(f'total time to run everything: {total_time_end - total_time_start:.2f}')
+    print(f'total time to run everything: {total_time_end - total_time_start:.4f}')
     print(f'{binary_mean=:.16f}')
     print(f'{pythonic_mean=:.16f}')
     if binary_mean > pythonic_mean:
