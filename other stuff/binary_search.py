@@ -11,9 +11,10 @@
 import heapq
 import random
 from time import time
+from typing import Any, Iterable
 
 
-def matrix_print(a: list[list[int]]) -> None:
+def matrix_print(a: Iterable[Iterable[Any]]) -> None:
     s = [[str(e) for e in row] for row in a]
     lens = [max(map(len, col)) for col in zip(*s)]
     fmt = '\t'.join('{{:{}}}'.format(x) for x in lens)
@@ -76,7 +77,7 @@ def get_2d_index(i: int, m) -> tuple[int, int]:
     return x, y
 
 
-def binary_search(a: list, value: int) -> tuple[int, int] | bool:
+def binary_search(a: list[list[int]], value: int) -> tuple[int, int] | bool:
     n = len(a)
     m = len(a[0])
 
@@ -146,21 +147,27 @@ def main() -> tuple[float, float]:
 
 if __name__ == '__main__':
     total_time_start = time()
-    binary_time_arr = []
-    pythonic_time_arr = []
-    for i in range(100):
+    binary_time_total = 0.0
+    pythonic_time_total = 0.0
+
+    num_of_tests = 100
+
+    for i in range(num_of_tests):
         binary_time, pythonic_time = main()
 
-        binary_time_arr.append(binary_time)
-        pythonic_time_arr.append(pythonic_time)
+        binary_time_total += binary_time
+        pythonic_time_total += pythonic_time
 
-    binary_mean = sum(binary_time_arr) / len(binary_time_arr)
-    pythonic_mean = sum(pythonic_time_arr) / len(pythonic_time_arr)
+    binary_mean = binary_time_total / num_of_tests
+    pythonic_mean = pythonic_time_total / num_of_tests
     total_time_end = time()
     print(f'total time to run everything: {total_time_end - total_time_start:.4f}')
     print(f'{binary_mean=:.16f}')
     print(f'{pythonic_mean=:.16f}')
-    if binary_mean > pythonic_mean:
-        print(f'pythonic way is {binary_mean/pythonic_mean:.2f}x faster')
-    elif binary_mean < pythonic_mean:
-        print(f'binary way is {pythonic_mean/binary_mean:.2f}x faster')
+    try:
+        if binary_mean > pythonic_mean:
+            print(f'pythonic way is {binary_mean/pythonic_mean:.2f}x faster')
+        elif binary_mean < pythonic_mean:
+            print(f'binary way is {pythonic_mean/binary_mean:.2f}x faster')
+    except ZeroDivisionError:
+        print('division by zero, your pc is too fast or have not precise enough timer')
