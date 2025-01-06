@@ -30,16 +30,15 @@ with open('other stuff/naval_in.txt') as f:
         a = list(map(int, row.split()))
 
         row_len = len(a)
-        for j in range(row_len):
+        j = 0
+        while j < row_len:
             if a[j] == 1 and (prev_row is None or prev_row[j] != 1):
                 counter += 1
-                a[j] = 0
-
                 k = j + 1
                 while k < row_len and a[k] == 1:
-                    a[k] = 0
                     k += 1
-
+                j = k
+            j += 1
         prev_row = a
 
     print(counter)
